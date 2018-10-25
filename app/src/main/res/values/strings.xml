@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Senso</string>
+    <string name="app_login">Anmelden</string>
+    <string name="app_register">Registrieren</string>
+    <string name="app_play_offline">Offline Spielen</string>
+    <string name="app_offline_singleplayer">Singleplayer</string>
+    <string name="app_offline_multiplayer">Multiplayer</string>
 </resources>
