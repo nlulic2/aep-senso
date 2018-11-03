@@ -5,4 +5,5 @@
     <string name="app_play_offline">Offline Spielen</string>
     <string name="app_offline_singleplayer">Singleplayer</string>
     <string name="app_offline_multiplayer">Multiplayer</string>
+    <string name="start_offline_single">Start</string>
 </resources>

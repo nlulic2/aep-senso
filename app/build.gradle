@@ -17,7 +17,9 @@ android {
         }
     }
     sourceSets {
-        main { java.srcDirs = ['src/main/java', 'src/main/java/com.nlulic.senso/Business'] }
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/java/com.nlulic.senso/Business', 'src/main/java/Business/Assets']
+        }
     }
 }
 
