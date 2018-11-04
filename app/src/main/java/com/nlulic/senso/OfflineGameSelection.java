@@ -20,7 +20,8 @@ public class OfflineGameSelection extends AppCompatActivity {
     private void handleClicks() {
 
         Button singlePlayer = findViewById(R.id.btnSingleplayer),
-               multiPlayer = findViewById(R.id.btnMultiplayer);
+               multiPlayer = findViewById(R.id.btnMultiplayer),
+               highscore = findViewById(R.id.btnHighscore);
 
         singlePlayer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,13 +33,31 @@ public class OfflineGameSelection extends AppCompatActivity {
         multiPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Not implemented yet", Toast.LENGTH_LONG).show();
+                openMultiplayerGameActivity();
             }
         });
+
+        highscore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openOfflineHighscoreActivity();
+            }
+        });
+
     }
 
     private void openSingleGameActivity() {
         Intent intent = new Intent(this, SingleGame.class);
+        startActivity(intent);
+    }
+
+    private void openMultiplayerGameActivity() {
+        Intent intent = new Intent(this, PlayerNameSelection.class);
+        startActivity(intent);
+    }
+
+    private void openOfflineHighscoreActivity() {
+        Intent intent = new Intent(this, OfflineGameHighscore.class);
         startActivity(intent);
     }
 }

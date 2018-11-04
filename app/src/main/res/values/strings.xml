@@ -6,4 +6,8 @@
     <string name="app_offline_singleplayer">Singleplayer</string>
     <string name="app_offline_multiplayer">Multiplayer</string>
     <string name="start_offline_single">Start</string>
+    <string name="highscore">Highscore</string>
+    <string name="player_name_selection_player_one">Spieler 1</string>
+    <string name="player_name_selection_player_two">Spieler 2</string>
+    <string name="player_name_selection_play">Spielen!</string>
 </resources>

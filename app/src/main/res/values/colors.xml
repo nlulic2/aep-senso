@@ -12,4 +12,5 @@
     <color name="blueActive">#107dac</color>
     <color name="yellow">#e9d700</color>
     <color name="yellowActive">#dab600</color>
+    <color name="lightGrey">#f2dada</color>
 </resources>

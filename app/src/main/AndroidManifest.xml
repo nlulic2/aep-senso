@@ -17,7 +17,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".OfflineGameSelection" />
-        <activity android:name=".SingleGame"></activity>
+        <activity android:name=".SingleGame" />
+        <activity
+            android:name=".PlayerNameSelection"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".MultiplayerGame" />
+        <activity android:name=".OfflineGameHighscore"></activity>
     </application>
 
 </manifest>
