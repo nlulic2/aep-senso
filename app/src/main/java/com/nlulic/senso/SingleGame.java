@@ -21,14 +21,14 @@ public class SingleGame extends AppCompatActivity {
         this.setClickListeners();
     }
 
-    private SensoGame game;
-    private List<SensoValue> userPattern;
+    private SensoGame game = new SensoGame();
+    private List<SensoValue> userPattern = new ArrayList<SensoValue>();
 
     private void startGame() {
 
         this.userPattern = new ArrayList<SensoValue>();
 
-        game = new SensoGame();
+        game.Reset();
         game.Run();
 
         iterateGamePattern();
@@ -95,6 +95,10 @@ public class SingleGame extends AppCompatActivity {
 
         yellowButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                if(!game.hasGameStarted())
+                    return;
+
                 userPattern.add(SensoValue.Yellow);
                 assertUserAndGamePattern();
                 handleClick(yellowButton);
@@ -103,6 +107,10 @@ public class SingleGame extends AppCompatActivity {
 
         greenButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                if(!game.hasGameStarted())
+                    return;
+
                 userPattern.add(SensoValue.Green);
                 assertUserAndGamePattern();
                 handleClick(greenButton);
@@ -111,6 +119,10 @@ public class SingleGame extends AppCompatActivity {
 
         redButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                if(!game.hasGameStarted())
+                    return;
+
                 userPattern.add(SensoValue.Red);
                 assertUserAndGamePattern();
                 handleClick(redButton);
@@ -119,6 +131,10 @@ public class SingleGame extends AppCompatActivity {
 
         blueButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+
+                if(!game.hasGameStarted())
+                    return;
+
                 userPattern.add(SensoValue.Blue);
                 assertUserAndGamePattern();
                 handleClick(blueButton);
@@ -138,6 +154,10 @@ public class SingleGame extends AppCompatActivity {
         if(userPattern.size() == game.getPattern().size()) {
             this.game.Append();
             this.userPattern = new ArrayList<SensoValue>();
+
+            Button roundButton = (Button)findViewById(R.id.btnRoundsPlayed);
+            roundButton.setText("" + game.getRounds());
+
             iterateGamePattern();
         }
 

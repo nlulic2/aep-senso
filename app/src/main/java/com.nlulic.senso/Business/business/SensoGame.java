@@ -12,6 +12,7 @@ public class SensoGame {
 
 
     List<SensoValue> pattern;
+    boolean gameStarted;
     boolean gameOver;
     int rounds;
 
@@ -24,6 +25,7 @@ public class SensoGame {
 
         pattern.add(randomValue());
         pattern.add(randomValue());
+        gameStarted = true;
     }
 
     public void Assert(List<SensoValue> userPattern) {
@@ -58,13 +60,20 @@ public class SensoGame {
     public void Reset() {
 
         pattern = new ArrayList<SensoValue>();
+        gameStarted = false;
         gameOver = false;
         latestIndex = 0;
         rounds = 0;
     }
 
     public boolean isGameOver() {
+
         return this.gameOver;
+    }
+
+    public boolean hasGameStarted() {
+
+        return this.gameStarted;
     }
 
     public List<SensoValue> getPattern() {
@@ -74,6 +83,7 @@ public class SensoGame {
     public int getRounds() {
         return this.rounds;
     }
+
 
     private SensoValue randomValue() {
         return SensoValue.values()[new Random().nextInt(SensoValue.values().length)];
