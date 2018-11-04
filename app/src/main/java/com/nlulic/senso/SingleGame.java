@@ -1,5 +1,7 @@
 package com.nlulic.senso;
 
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,13 +25,16 @@ public class SingleGame extends AppCompatActivity {
 
     private SensoGame game = new SensoGame();
     private List<SensoValue> userPattern = new ArrayList<SensoValue>();
+    private ToneGenerator toneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
 
     private void startGame() {
+
+        stopRepeating();
 
         this.userPattern = new ArrayList<SensoValue>();
 
         game.Reset();
-        renderRounds(); 
+        renderRounds();
         game.Run();
 
         iterateGamePattern();
@@ -181,18 +186,22 @@ public class SingleGame extends AppCompatActivity {
 
         switch (button.getId()) {
             case R.id.btnYellow:
+                toneGenerator.startTone(ToneGenerator.TONE_CDMA_PIP, 150);
                 activeColor = R.color.yellowActive;
                 colorTemp = R.color.yellow;
                 break;
             case R.id.btnRed:
+                toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_ALERT, 150);
                 activeColor = R.color.redActive;
                 colorTemp = R.color.red;
                 break;
             case R.id.btnGreen:
+                toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_INTERCEPT, 150);
                 activeColor = R.color.greenActive;
                 colorTemp = R.color.green;
                 break;
             case R.id.btnBlue:
+                toneGenerator.startTone(ToneGenerator.TONE_CDMA_ABBR_REORDER, 150);
                 activeColor = R.color.blueActive;
                 colorTemp = R.color.blue;
                 break;
