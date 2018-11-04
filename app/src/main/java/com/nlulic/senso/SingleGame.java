@@ -29,6 +29,7 @@ public class SingleGame extends AppCompatActivity {
         this.userPattern = new ArrayList<SensoValue>();
 
         game.Reset();
+        renderRounds(); 
         game.Run();
 
         iterateGamePattern();
@@ -155,12 +156,16 @@ public class SingleGame extends AppCompatActivity {
             this.game.Append();
             this.userPattern = new ArrayList<SensoValue>();
 
-            Button roundButton = (Button)findViewById(R.id.btnRoundsPlayed);
-            roundButton.setText("" + game.getRounds());
-
+            renderRounds();
             iterateGamePattern();
         }
 
+    }
+
+    private void renderRounds() {
+
+        Button roundButton = (Button)findViewById(R.id.btnRoundsPlayed);
+        roundButton.setText("" + game.getRounds());
     }
 
     private boolean isClicking = false;
