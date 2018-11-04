@@ -16,26 +16,22 @@ public class SensoGame {
     int rounds;
 
     public SensoGame() {
+
         Reset();
     }
 
     public void Run() {
 
-        pattern.add(SensoValue.Yellow);
-        pattern.add(SensoValue.Red);
-        pattern.add(SensoValue.Green);
-        pattern.add(SensoValue.Blue);
+        pattern.add(randomValue());
+        pattern.add(randomValue());
     }
 
     public void Assert(List<SensoValue> userPattern) {
 
         List<SensoValue> equalLengthPattern = this.pattern.subList(0, userPattern.size());
 
-        if(userPattern.equals(equalLengthPattern)) {
-            rounds++;
-        } else {
+        if(!userPattern.equals(equalLengthPattern))
             gameOver = true;
-        }
     }
 
     private int latestIndex = 0;
@@ -49,8 +45,6 @@ public class SensoGame {
         SensoValue next = this.pattern.get(latestIndex);
         latestIndex++;
 
-
-
         return next;
     }
 
@@ -58,6 +52,7 @@ public class SensoGame {
     public void Append() {
 
         this.pattern.add(randomValue());
+        this.rounds++;
     }
 
     public void Reset() {
@@ -74,6 +69,10 @@ public class SensoGame {
 
     public List<SensoValue> getPattern() {
         return this.pattern;
+    }
+
+    public int getRounds() {
+        return this.rounds;
     }
 
     private SensoValue randomValue() {

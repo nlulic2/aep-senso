@@ -1,18 +1,13 @@
 package com.nlulic.senso;
 
-import android.media.AudioManager;
-import android.media.ToneGenerator;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import business.SensoGame;
 import business.SensoValue;
 
@@ -64,7 +59,6 @@ public class SingleGame extends AppCompatActivity {
 
             Button button = null;
 
-
             switch (value) {
                 case Yellow:
                     button = (Button)findViewById(R.id.btnYellow);
@@ -80,11 +74,8 @@ public class SingleGame extends AppCompatActivity {
                     break;
             }
 
-            //Toast.makeText(getApplicationContext(), x, Toast.LENGTH_SHORT).show();
             handleClick(button);
             mHandler.postDelayed(this, 1000);
-
-
         }
     };
 
@@ -105,6 +96,7 @@ public class SingleGame extends AppCompatActivity {
         yellowButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 userPattern.add(SensoValue.Yellow);
+                assertUserAndGamePattern();
                 handleClick(yellowButton);
             }
         });
@@ -112,6 +104,7 @@ public class SingleGame extends AppCompatActivity {
         greenButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 userPattern.add(SensoValue.Green);
+                assertUserAndGamePattern();
                 handleClick(greenButton);
             }
         });
@@ -119,6 +112,7 @@ public class SingleGame extends AppCompatActivity {
         redButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 userPattern.add(SensoValue.Red);
+                assertUserAndGamePattern();
                 handleClick(redButton);
             }
         });
@@ -126,9 +120,27 @@ public class SingleGame extends AppCompatActivity {
         blueButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 userPattern.add(SensoValue.Blue);
+                assertUserAndGamePattern();
                 handleClick(blueButton);
             }
         });
+    }
+
+    private void assertUserAndGamePattern() {
+
+        game.Assert(userPattern);
+
+        if(game.isGameOver()) {
+            Toast.makeText(getApplicationContext(), "Game Over, played " + game.getRounds() + " rounds.", Toast.LENGTH_LONG).show();
+            game.Reset();
+        }
+
+        if(userPattern.size() == game.getPattern().size()) {
+            this.game.Append();
+            this.userPattern = new ArrayList<SensoValue>();
+            iterateGamePattern();
+        }
+
     }
 
     private boolean isClicking = false;
