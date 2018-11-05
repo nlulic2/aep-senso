@@ -1,9 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MultiplayerGame">
+    tools:context=".SingleGame">
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <Button
+            android:id="@+id/btnGreen"
+            android:layout_width="100dp"
+            android:stateListAnimator="@null"
+            android:layout_height="100dp"
+            android:background="@color/green"
+            android:layout_marginTop="100dp"
+            />
+
+        <Button
+            android:id="@+id/btnRed"
+            android:layout_width="100dp"
+            android:stateListAnimator="@null"
+            android:layout_height="100dp"
+            android:background="@color/red"
+            android:layout_marginLeft="100dp"
+            />
+
+        <Button
+            android:id="@+id/btnBlue"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:stateListAnimator="@null"
+            android:background="@color/blue"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="100dp"
+            />
+
+        <Button
+            android:id="@+id/btnYellow"
+            android:layout_width="100dp"
+            android:stateListAnimator="@null"
+            android:layout_height="100dp"
+            android:background="@color/yellow"
+            />
+
+
+        <Button
+            android:id="@+id/btnRoundsPlayed"
+            android:background="@drawable/button_round"
+            android:layout_marginLeft="75dp"
+            android:layout_marginTop="75dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="0" />
+
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/startSingleGame"
+        android:text="@string/start_offline_single"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="500dp"
+        android:layout_centerHorizontal="true"
+        />
+
+</RelativeLayout>
