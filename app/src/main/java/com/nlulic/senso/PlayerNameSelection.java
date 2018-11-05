@@ -39,10 +39,12 @@ public class PlayerNameSelection extends AppCompatActivity {
 
             Toast.makeText(getApplicationContext(), "Bitte geben Sie einen Namen für beide Spieler an." , Toast.LENGTH_LONG).show();
             return;
-
         }
 
         Intent intent = new Intent(this, MultiplayerGame.class);
+        intent.putExtra("PlayerOne", playerOneName);
+        intent.putExtra("PlayerTwo", playerTwoName);
+
         startActivity(intent);
     }
 
