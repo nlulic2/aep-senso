@@ -1,69 +1,62 @@
 package business;
 
+import android.util.Log;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import business.SensoValue;
 
 public class SensoGame {
 
-
-    List<SensoValue> pattern;
-    boolean gameStarted;
+    private GamePattern gamePattern;
+    private SensoPattern userPattern;
+    private RoundCounter rounds;
     boolean gameOver;
-    int rounds;
 
     public SensoGame() {
 
-        Reset();
+        this.rounds = new RoundCounter();
+        this.gameOver = false;
+    }
+
+    public SensoGame(GamePattern gamePattern, SensoPattern userPattern) {
+        this();
+
+        this.gamePattern = gamePattern;
+        this.userPattern = userPattern;
     }
 
     public void Run() {
 
-        pattern.add(randomValue());
-        pattern.add(randomValue());
-        gameStarted = true;
+        this.gamePattern.Append();
     }
 
-    public void Assert(List<SensoValue> userPattern) {
+    public void ComparePatterns() {
 
-        List<SensoValue> equalLengthPattern = this.pattern.subList(0, userPattern.size());
-
-        if(!userPattern.equals(equalLengthPattern))
+        if(!this.gamePattern.Assert(this.userPattern)) {
             gameOver = true;
-    }
-
-    private int latestIndex = 0;
-    public SensoValue Next() {
-
-        if(latestIndex > this.pattern.size()-1) {
-            this.latestIndex = 0;
-            return null;
         }
-
-        SensoValue next = this.pattern.get(latestIndex);
-        latestIndex++;
-
-        return next;
     }
 
+    public SensoValue NextGamePattern() {
+        return this.gamePattern.Next();
+    }
 
-    public void Append() {
+    public void NextRound() {
 
-        this.pattern.add(randomValue());
-        this.rounds++;
+        this.userPattern = new SensoPattern();
+        this.gamePattern.Append();
+        this.rounds.Add();
+    }
+
+    public void AddUserPattern(SensoValue value) {
+        this.userPattern.Add(value);
     }
 
     public void Reset() {
-
-        pattern = new ArrayList<SensoValue>();
-        gameStarted = false;
-        gameOver = false;
-        latestIndex = 0;
-        rounds = 0;
+        this.gamePattern = new GamePattern();
+        this.userPattern = new SensoPattern();
+        this.rounds.Restart();
+        this.gameOver = false;
     }
 
     public boolean isGameOver() {
@@ -73,20 +66,19 @@ public class SensoGame {
 
     public boolean hasGameStarted() {
 
-        return this.gameStarted;
+        return this.gamePattern.getPattern().size() > 0 && !this.gameOver;
     }
 
-    public List<SensoValue> getPattern() {
-        return this.pattern;
+    public List<SensoValue> getGamePattern() {
+        return this.gamePattern.getPattern();
+    }
+
+    public List<SensoValue> getUserPattern() {
+        return this.userPattern.getPattern();
     }
 
     public int getRounds() {
-        return this.rounds;
-    }
-
-
-    private SensoValue randomValue() {
-        return SensoValue.values()[new Random().nextInt(SensoValue.values().length)];
+        return this.rounds.getRounds();
     }
 
 }
