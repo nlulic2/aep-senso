@@ -21,6 +21,8 @@ public class SingleGame extends AppCompatActivity {
     private boolean isClicking = false;
     private boolean isIterating = false;
 
+    private final int ITERATION_DELAY = 1000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,31 @@ public class SingleGame extends AppCompatActivity {
                 startGame();
             }
         });
+    }
+
+    private void setButtonListeners() {
+
+        final List<Button> buttons = Arrays.asList(
+                (Button)findViewById(R.id.btnYellow),
+                (Button)findViewById(R.id.btnGreen),
+                (Button)findViewById(R.id.btnBlue),
+                (Button)findViewById(R.id.btnRed)
+        );
+
+        for(final Button button :  buttons) {
+
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                    if(!game.hasGameStarted() || isClicking || isIterating)
+                        return;
+
+                    game.AddUserPattern(SensoValueByButton(button));
+                    assertUserAndGamePattern();
+                    handleClick(button);
+                }
+            });
+        }
     }
 
     private void startGame() {
@@ -64,7 +91,7 @@ public class SingleGame extends AppCompatActivity {
             }
 
             handleClick(ButtonBySensoValue(value));
-            handler.postDelayed(this, 1000);
+            handler.postDelayed(this, ITERATION_DELAY);
         }
     };
 
@@ -93,33 +120,10 @@ public class SingleGame extends AppCompatActivity {
     private void renderRounds() {
 
         Button roundButton = (Button)findViewById(R.id.btnRoundsPlayed);
-        roundButton.setText("" + game.getRounds());
+        roundButton.setText(game.getRounds() + "");
     }
 
-    private void setButtonListeners() {
 
-        final List<Button> buttons = Arrays.asList(
-                (Button)findViewById(R.id.btnYellow),
-                (Button)findViewById(R.id.btnGreen),
-                (Button)findViewById(R.id.btnBlue),
-                (Button)findViewById(R.id.btnRed)
-        );
-
-        for(final Button button :  buttons) {
-
-            button.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-
-                    if(!game.hasGameStarted() || isClicking || isIterating)
-                        return;
-
-                    game.AddUserPattern(SensoValueByButton(button));
-                    assertUserAndGamePattern();
-                    handleClick(button);
-                }
-            });
-        }
-    }
 
     private SensoValue SensoValueByButton(Button button) {
 
@@ -195,7 +199,7 @@ public class SingleGame extends AppCompatActivity {
                 button.setBackgroundColor(getResources().getColor(color));
                 isClicking = false;
             }
-        }, 500);
+        }, ITERATION_DELAY / 2);
 
     }
 }
