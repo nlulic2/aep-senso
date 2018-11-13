@@ -14,12 +14,14 @@ import org.w3c.dom.Text;
 import java.util.Arrays;
 import java.util.List;
 
+import business.SensoGame;
 import business.SensoSound;
 
 public class MultiplayerGame extends AppCompatActivity {
 
     private String playerOne, playerTwo;
     private SensoSound tone = new SensoSound();
+    private SensoGame game = new SensoGame();
 
     private boolean isClicking;
 
@@ -27,37 +29,30 @@ public class MultiplayerGame extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multiplayer_game);
-        this.setup();
-    }
 
-    private void setup() {
         this.getPlayers();
-        this.renderPlayers(this.playerOne, this.playerTwo);
-        this.setButtonListeners();
+        this.render();
     }
 
-    private void getPlayers() {
-        Bundle extras = getIntent().getExtras();
+    private void render() {
 
-        Intent intent = getIntent();
 
-        this.playerOne = intent.getStringExtra("PlayerOne");
-        this.playerTwo = intent.getStringExtra("PlayerTwo");
-    }
 
-    private void renderPlayers(String firstPlayer, String secondPlayer) {
+        Button start = findViewById(R.id.startMultiplayerGame);
 
-        TextView playerDisplay = findViewById(R.id.playerDisplay);
-        playerDisplay.setText(firstPlayer + " vs. " +  secondPlayer);
-    }
+        start.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
 
-    private void setButtonListeners() {
+                showCurrentPlayer();
+            }
+        });
+
 
         final List<Button> buttons = Arrays.asList(
-            (Button)findViewById(R.id.btnYellow),
-            (Button)findViewById(R.id.btnGreen),
-            (Button)findViewById(R.id.btnBlue),
-            (Button)findViewById(R.id.btnRed)
+                (Button)findViewById(R.id.btnYellow),
+                (Button)findViewById(R.id.btnGreen),
+                (Button)findViewById(R.id.btnBlue),
+                (Button)findViewById(R.id.btnRed)
         );
 
         for(final Button button :  buttons) {
@@ -70,6 +65,27 @@ public class MultiplayerGame extends AppCompatActivity {
                 }
             });
         }
+
+        TextView playerDisplay = findViewById(R.id.playerDisplay);
+        playerDisplay.setText(this.playerOne + " vs. " +  this.playerTwo);
+
+    }
+
+    private void getPlayers() {
+        Bundle extras = getIntent().getExtras();
+
+        Intent intent = getIntent();
+
+        this.playerOne = intent.getStringExtra("PlayerOne");
+        this.playerTwo = intent.getStringExtra("PlayerTwo");
+    }
+
+    private void showCurrentPlayer() {
+
+        String currentPlayer = this.game.getRounds() % 2 == 0 ? this.playerOne : this.playerTwo;
+        TextView playerTextbox = findViewById(R.id.currentPlayer);
+
+        playerTextbox.setText(currentPlayer);
     }
 
     private void handleClick(final Button button) {
