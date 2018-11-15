@@ -8,22 +8,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
-
 import java.util.Arrays;
 import java.util.List;
-
 import business.SensoGame;
 import business.SensoSound;
+import business.SensoValue;
 
 public class MultiplayerGame extends AppCompatActivity {
 
     private String playerOne, playerTwo;
     private SensoSound tone = new SensoSound();
     private SensoGame game = new SensoGame();
+    private Handler handler = new Handler();
 
     private boolean isClicking;
+    private boolean isIterating;
+
+    private final int ITERATION_DELAY = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +37,14 @@ public class MultiplayerGame extends AppCompatActivity {
 
     private void render() {
 
-
-
         Button start = findViewById(R.id.startMultiplayerGame);
 
         start.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                showCurrentPlayer();
+                startGame();
             }
         });
-
 
         final List<Button> buttons = Arrays.asList(
                 (Button)findViewById(R.id.btnYellow),
@@ -60,7 +58,12 @@ public class MultiplayerGame extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    Toast.makeText(getApplicationContext(), "CLICK", Toast.LENGTH_LONG).show();
+                    if(!game.hasGameStarted() || isClicking || isIterating)
+                        return;
+
+                    game.AddUserPattern(SensoValueByButton(button));
+                    assertUserAndGamePattern();
+                    handleClick(button);
 
                 }
             });
@@ -69,6 +72,102 @@ public class MultiplayerGame extends AppCompatActivity {
         TextView playerDisplay = findViewById(R.id.playerDisplay);
         playerDisplay.setText(this.playerOne + " vs. " +  this.playerTwo);
 
+    }
+
+    private void startGame() {
+
+        stopRepeating();
+
+        game.Reset();
+        renderRounds();
+        showCurrentPlayer();
+        game.Run();
+
+        iterateGamePattern();
+    }
+
+    private void iterateGamePattern() {
+
+        handler.postDelayed(patternIterator, 1000);
+    }
+
+    private Runnable patternIterator = new Runnable() {
+        @Override
+        public void run() {
+
+            isIterating = true;
+            SensoValue value = game.NextGamePattern();
+
+            if(value == null) {
+                stopRepeating();
+                return;
+            }
+
+            handleClick(ButtonBySensoValue(value));
+            handler.postDelayed(this, ITERATION_DELAY);
+        }
+    };
+
+    private void stopRepeating() {
+        isIterating = false;
+        handler.removeCallbacks(patternIterator);
+    }
+
+    private SensoValue SensoValueByButton(Button button) {
+
+        switch (button.getId()) {
+            case R.id.btnYellow:
+                return SensoValue.Yellow;
+            case R.id.btnGreen:
+                return SensoValue.Green;
+            case R.id.btnBlue:
+                return SensoValue.Blue;
+            case R.id.btnRed:
+                return SensoValue.Red;
+            default:
+                return null;
+        }
+    }
+
+    private Button ButtonBySensoValue(SensoValue value) {
+
+        switch (value) {
+            case Yellow:
+                return (Button)findViewById(R.id.btnYellow);
+            case Red:
+                return (Button)findViewById(R.id.btnRed);
+            case Green:
+                return (Button)findViewById(R.id.btnGreen);
+            case Blue:
+                return (Button)findViewById(R.id.btnBlue);
+            default:
+                return null;
+        }
+
+    }
+
+    private void renderRounds() {
+
+        Button roundButton = (Button)findViewById(R.id.btnRoundsPlayed);
+        roundButton.setText(game.getRounds() + "");
+    }
+
+    private void assertUserAndGamePattern() {
+
+        game.ComparePatterns();
+
+        if(game.isGameOver()) {
+            Toast.makeText(getApplicationContext(), getCurrentPlayer(), Toast.LENGTH_LONG).show();
+            game.Reset();
+        }
+
+        if(!game.isGameOver() &&  game.getUserPattern().size() == game.getGamePattern().size()) {
+
+            this.game.NextRound();
+            renderRounds();
+            showCurrentPlayer();
+            iterateGamePattern();
+        }
     }
 
     private void getPlayers() {
@@ -82,7 +181,7 @@ public class MultiplayerGame extends AppCompatActivity {
 
     private void showCurrentPlayer() {
 
-        String currentPlayer = this.game.getRounds() % 2 == 0 ? this.playerOne : this.playerTwo;
+        String currentPlayer = this.getCurrentPlayer();
         TextView playerTextbox = findViewById(R.id.currentPlayer);
 
         playerTextbox.setText(currentPlayer);
@@ -131,5 +230,9 @@ public class MultiplayerGame extends AppCompatActivity {
             }
         }, 1000 / 2);
 
+    }
+
+    private String getCurrentPlayer() {
+        return this.game.getRounds() % 2 == 0 ? this.playerOne : this.playerTwo;
     }
 }
