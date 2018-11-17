@@ -66,7 +66,7 @@ public class SensoGame {
 
     public boolean hasGameStarted() {
 
-        return this.gamePattern.getPattern().size() > 0 && !this.gameOver;
+        return this.gamePattern != null && this.gamePattern.getPattern().size() > 0 && !this.gameOver;
     }
 
     public List<SensoValue> getGamePattern() {

@@ -51,8 +51,11 @@ public class SingleGame extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if(!game.hasGameStarted() || isClicking || isIterating)
+                    if(!game.hasGameStarted() || game.isGameOver() || isClicking || isIterating)
                         return;
+
+                    Toast.makeText(getApplicationContext(), "wtf", Toast.LENGTH_LONG).show();
+
 
                     game.AddUserPattern(SensoValueByButton(button));
                     assertUserAndGamePattern();
@@ -106,7 +109,6 @@ public class SingleGame extends AppCompatActivity {
 
         if(game.isGameOver()) {
             Toast.makeText(getApplicationContext(), "Game Over, played " + game.getRounds() + " rounds.", Toast.LENGTH_LONG).show();
-            game.Reset();
         }
 
         if(game.getUserPattern().size() == game.getGamePattern().size()) {

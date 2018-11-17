@@ -58,7 +58,7 @@ public class MultiplayerGame extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if(!game.hasGameStarted() || isClicking || isIterating)
+                    if(!game.hasGameStarted() || game.isGameOver()  || isClicking || isIterating)
                         return;
 
                     game.AddUserPattern(SensoValueByButton(button));
@@ -158,7 +158,6 @@ public class MultiplayerGame extends AppCompatActivity {
 
         if(game.isGameOver()) {
             Toast.makeText(getApplicationContext(), getCurrentPlayer(), Toast.LENGTH_LONG).show();
-            game.Reset();
         }
 
         if(!game.isGameOver() &&  game.getUserPattern().size() == game.getGamePattern().size()) {
