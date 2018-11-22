@@ -156,17 +156,28 @@ public class MultiplayerGame extends AppCompatActivity {
 
         game.ComparePatterns();
 
+        Handler assertionHandler = new Handler();
+
+        Runnable runAssertion = new Runnable() {
+            @Override
+            public void run() {
+
+                if(!game.isGameOver() &&  game.getUserPattern().size() == game.getGamePattern().size()) {
+
+                    game.NextRound();
+                    renderRounds();
+                    showCurrentPlayer();
+                    iterateGamePattern();
+                }
+
+            }
+        };
+
         if(game.isGameOver()) {
             Toast.makeText(getApplicationContext(), getCurrentPlayer(), Toast.LENGTH_LONG).show();
         }
 
-        if(!game.isGameOver() &&  game.getUserPattern().size() == game.getGamePattern().size()) {
-
-            this.game.NextRound();
-            renderRounds();
-            showCurrentPlayer();
-            iterateGamePattern();
-        }
+        assertionHandler.postDelayed(runAssertion, 1000);
     }
 
     private void getPlayers() {
