@@ -13,6 +13,7 @@ import java.util.List;
 import business.SensoGame;
 import business.SensoSound;
 import business.SensoValue;
+import data.SaveGameResultService;
 
 public class MultiplayerGame extends AppCompatActivity {
 
@@ -174,7 +175,14 @@ public class MultiplayerGame extends AppCompatActivity {
         };
 
         if(game.isGameOver()) {
-            Toast.makeText(getApplicationContext(), getCurrentPlayer(), Toast.LENGTH_LONG).show();
+
+            boolean success = SaveGameResultService.Process(playerOne, playerTwo, getCurrentPlayer() == playerOne ? playerTwo : playerOne, this);
+
+            if(success) {
+                Toast.makeText(getApplicationContext(), "saved", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
+            }
         }
 
         assertionHandler.postDelayed(runAssertion, 1000);
