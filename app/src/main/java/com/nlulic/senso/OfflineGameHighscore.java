@@ -48,6 +48,8 @@ public class OfflineGameHighscore extends AppCompatActivity {
         }
 
 
+
+
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, results);
 
         ListView list = (ListView) findViewById(R.id.highscoreList);

@@ -22,7 +22,9 @@
             android:name=".PlayerNameSelection"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".MultiplayerGame" />
-        <activity android:name=".OfflineGameHighscore"></activity>
+        <activity android:name=".OfflineGameHighscore" />
+        <activity android:name=".Login" />
+        <activity android:name=".Register"></activity>
     </application>
 
 </manifest>
