@@ -1,6 +1,5 @@
 package com.nlulic.senso;
 
-import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -8,12 +7,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 import Dto.GameResult;
-import data.GameResultProvider;
 import data.MySqliteOpenHelper;
 
 public class OfflineGameHighscore extends AppCompatActivity {

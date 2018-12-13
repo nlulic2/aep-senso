@@ -18,7 +18,7 @@ import Dto.User;
 public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
     private static final String database_name = "senso.db";
-    private static final int database_version = 1;
+    private static final int database_version = 3;
 
     private String table_name = "game_result",
         column_player_one = "player_one",
@@ -56,10 +56,11 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // changes in the database
-        /*
-        db.execSQL("DROP TABLE IF EXITS " + table_name);
+
+        db.execSQL("DROP TABLE IF EXISTS " + table_name);
+        db.execSQL("DROP TABLE IF EXISTS " + user_table);
+
         onCreate(db);
-        */
     }
 
     public boolean InsertGameResult(String playerOne, String playerTwo, String winner) {
@@ -75,7 +76,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         return ins != -1;
     }
 
-    public boolean RegisterUser(User user, String password) {
+    public User RegisterUser(User user, String password) {
 
         SQLiteDatabase db = this.getReadableDatabase();
         ContentValues content = new ContentValues();
@@ -86,9 +87,61 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
         long ins = db.insert(user_table, null, content);
 
-        System.out.println("INS" + ins);
+        if(ins == -1)
+            return null;
 
-        return ins != -1;
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s WHERE %s = '%s';", user_table, column_username, user.Username()), null);
+
+        User newUser = new User();
+
+        while(cursor.moveToNext()) {
+
+            String displayName = cursor.getString(cursor.getColumnIndex(column_display_name)),
+                    name = cursor.getString(cursor.getColumnIndex(column_username)),
+                    guid = cursor.getString(cursor.getColumnIndex(column_guid));
+
+            newUser = new User(displayName, name, guid);
+        }
+
+        return newUser;
+    }
+
+    public User Login(String username, String password) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s WHERE %s = '%s' AND %s = '%s';", user_table, column_username, username, column_password, password), null);
+
+        User user = new User();
+
+        while(cursor.moveToNext()) {
+
+            String displayName = cursor.getString(cursor.getColumnIndex(column_display_name)),
+                    name = cursor.getString(cursor.getColumnIndex(column_username)),
+                    guid = cursor.getString(cursor.getColumnIndex(column_guid));
+
+            user = new User(displayName, name, guid);
+        }
+
+        return user;
+    }
+
+    public boolean CheckIfUserExists(String username) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s WHERE %s = '%s';", user_table, column_username, username), null);
+
+        User user = null;
+
+        while(cursor.moveToNext()) {
+
+            String displayName = cursor.getString(cursor.getColumnIndex(column_display_name)),
+                   name = cursor.getString(cursor.getColumnIndex(column_guid)),
+                   guid = cursor.getString(cursor.getColumnIndex(column_guid));
+
+            user = new User(displayName, name, guid);
+        }
+
+        return user != null;
     }
 
     public List<GameResult> getAll() {

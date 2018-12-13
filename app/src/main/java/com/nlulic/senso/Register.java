@@ -1,5 +1,10 @@
 package com.nlulic.senso;
 
+import Dto.User;
+import data.MySqliteOpenHelper;
+import data.UserService;
+
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +14,17 @@ import android.widget.Toast;
 
 public class Register extends AppCompatActivity {
 
+    MySqliteOpenHelper databaseManger;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+
+        databaseManger = new MySqliteOpenHelper(this);
+
+
 
         this.handleClicks();
     }
@@ -48,12 +60,31 @@ public class Register extends AppCompatActivity {
                 missingField = "Passwort";
 
             Toast.makeText(getApplicationContext(), "Bitte geben Sie ein "  + missingField + " an.", Toast.LENGTH_LONG).show();
+            return;
         }
 
-        //do the register
+        UserService userService = new UserService(this);
 
+        if(userService.Exists(username)) {
+            Toast.makeText(getApplicationContext(), "Benutzer "  + username + " existiert bereits.", Toast.LENGTH_LONG).show();
+            return;
+        }
 
+        User user = userService.Register(name, username, password);
 
+        if(!user.IsEmpty()) {
+            Toast.makeText(getApplicationContext(), String.format("Der Benutzer %s wurde erstellt!", user.Username()), Toast.LENGTH_LONG).show();
+            openLoginActivity(user.Username(), password);
+        } else {
+            Toast.makeText(getApplicationContext(), "Fehler beim erstellen des Benutzers!", Toast.LENGTH_LONG).show();
+        }
+    }
 
+    private void openLoginActivity(String username, String password) {
+
+        Intent intent = new Intent(this, Login.class);
+        intent.putExtra("username", username);
+        intent.putExtra("password", password);
+        startActivity(intent);
     }
 }

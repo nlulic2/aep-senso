@@ -9,6 +9,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import Dto.User;
+import business.Session;
+import data.UserService;
+
 public class Login extends AppCompatActivity {
 
     @Override
@@ -17,6 +21,17 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         this.handleClicks();
+        this.render();
+    }
+
+    private void render() {
+        Intent intent = getIntent();
+
+        EditText username = findViewById(R.id.etLoginUsername),
+                 password = findViewById(R.id.etLoginPassword);
+
+        username.setText(intent.getStringExtra("username"));
+        password.setText(intent.getStringExtra("password"));
     }
 
     private void handleClicks() {
@@ -45,12 +60,15 @@ public class Login extends AppCompatActivity {
 
     private void Login() {
 
-        EditText username = findViewById(R.id.etLoginUsername),
-                 password = findViewById(R.id.etLoginPassword);
+        EditText usernameEdit = findViewById(R.id.etLoginUsername),
+                 passwordEdit = findViewById(R.id.etLoginPassword);
 
-        if(username.getText().toString().trim().length() < 1 || password.getText().toString().trim().length() < 1) {
+        String username = usernameEdit.getText().toString(),
+               password = passwordEdit.getText().toString();
 
-            String alertMessage = username.getText().toString().trim().length() < 1
+        if(username.trim().length() < 1 || password.trim().length() < 1) {
+
+            String alertMessage = username.trim().length() < 1
                 ? "Bitte geben Sie einen Benutzernamen an."
                 : "Bitte geben Sie ein Passwort an.";
 
@@ -58,7 +76,17 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        //do the login logic and redirect to mainActivity
+        UserService userService = new UserService(this);
+        User user = userService.Login(username, password);
+
+        if(user.IsEmpty()) {
+            Toast.makeText(getApplicationContext(), "Falsche Benutzername oder Passwort, bitte versuchen Sie es erneut", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //TODO: make it impossible to have more than two values in array, when the session is empty always redirect from
+        //routes to Login (Except from Register and Main)
+        Session.Store(user);
 
     }
 }
