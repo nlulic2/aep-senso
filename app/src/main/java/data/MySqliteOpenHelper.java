@@ -6,11 +6,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
+import java.sql.SQLInput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.UUID;
 
 import Dto.GameResult;
+import Dto.User;
 
 public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
@@ -23,8 +26,13 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         column_winner = "winner",
         column_id = "id";
 
-    public MySqliteOpenHelper(Context ctxt) {
+    private String user_table = "user",
+        column_display_name = "display_name",
+        column_username = "username",
+        column_password = "password",
+        column_guid = "guid";
 
+    public MySqliteOpenHelper(Context ctxt) {
         super(ctxt, database_name, null, database_version);
     }
 
@@ -36,6 +44,13 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR(255), %s VARCHAR(255), %s VARCHAR(255))",
             table_name, column_id, column_player_one, column_player_two, column_winner
         ));
+
+        db.execSQL(String.format(
+            "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR(255), %s VARCHAR(255) UNIQUE, %s VARCHAR(255), %s VARCHAR(255))",
+            user_table, column_id, column_display_name, column_username, column_password, column_guid
+        ));
+
+        System.out.print("CREATED TABLEEEEEEEEEEEEEEEEEEES");
     }
 
     @Override
@@ -56,6 +71,22 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         content.put(column_winner, winner);
 
         long ins = db.insert(table_name, null, content);
+
+        return ins != -1;
+    }
+
+    public boolean RegisterUser(User user, String password) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(column_guid, UUID.randomUUID().toString());
+        content.put(column_display_name, user.DisplayName());
+        content.put(column_username, user.Username());
+        content.put(column_password, password);
+
+        long ins = db.insert(user_table, null, content);
+
+        System.out.println("INS" + ins);
 
         return ins != -1;
     }
