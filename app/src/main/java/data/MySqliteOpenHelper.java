@@ -18,7 +18,7 @@ import Dto.User;
 public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
     private static final String database_name = "senso.db";
-    private static final int database_version = 3;
+    private static final int database_version = 4;
 
     private String table_name = "game_result",
         column_player_one = "player_one",
@@ -33,7 +33,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         column_guid = "guid";
 
     private String highscore_table = "highscore",
-        column_player_id = "player_id",
+        column_player_guid = "player_guid",
         column_score = "score";
 
     public MySqliteOpenHelper(Context ctxt) {
@@ -54,14 +54,11 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
             user_table, column_id, column_display_name, column_username, column_password, column_guid
         ));
 
-        /*
         db.execSQL(String.format(
-            "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %d INTEGER, %d INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))",
-            highscore_table, column_id, column_score, column_player_id, column_player_id, user_table, column_id
+            "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s INTEGER, %s INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))",
+            highscore_table, column_id, column_score, column_player_guid, column_player_guid, user_table, column_guid
         ));
-        */
 
-        System.out.print("CREATED TABLEEEEEEEEEEEEEEEEEEES");
     }
 
     @Override
@@ -72,6 +69,18 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + user_table);
 
         onCreate(db);
+    }
+
+    public boolean InsertScore(String guid, int score) {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues content = new ContentValues();
+        content.put(column_score, score);
+        content.put(column_player_guid, guid);
+
+        long ins = db.insert(highscore_table, null, content);
+
+        return ins != -1;
     }
 
     public boolean InsertGameResult(String playerOne, String playerTwo, String winner) {
@@ -85,6 +94,27 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         long ins = db.insert(table_name, null, content);
 
         return ins != -1;
+    }
+
+    public List<GameResult> GetSinglePlayerGameResults() {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(String.format("SELECT * FROM %s JOIN %s ON %s = %s ORDER BY %s DESC", highscore_table, user_table, column_player_guid, column_guid, column_score), null);
+
+        List<GameResult> results = new ArrayList<GameResult>();
+
+        while(cursor.moveToNext()) {
+
+            String username = cursor.getString(cursor.getColumnIndex(column_username)),
+                    name = cursor.getString(cursor.getColumnIndex(column_display_name)),
+                    guid = cursor.getString(cursor.getColumnIndex(column_player_guid)),
+                    score = cursor.getString(cursor.getColumnIndex(column_score));
+
+            results.add(new GameResult(name, username, score, guid));
+        }
+
+        return results;
     }
 
     public User RegisterUser(User user, String password) {
@@ -157,6 +187,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
     public List<GameResult> getAll() {
 
+        /*
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM " + table_name, null);
@@ -176,5 +207,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
 
 
         return results;
+        */
+        return null;
     }
 }

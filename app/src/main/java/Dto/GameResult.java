@@ -2,26 +2,28 @@ package Dto;
 
 public class GameResult {
 
-    private String PlayerOne;
-    private String PlayerTwo;
-    private String Winner;
+    private String username;
+    private String name;
+    private String guid;
+    private String score;
 
-    public GameResult(String playerOne, String playerTwo, String winner) {
-
-        this.PlayerOne = playerOne;
-        this.PlayerTwo = playerTwo;
-        this.Winner = winner;
+    public GameResult(String name, String username, String score, String guid) {
+        this.username = username;
+        this.score = score;
+        this.name = name;
+        this.guid = guid;
     }
 
-    public String getPlayerOne() {
-        return this.PlayerOne;
+    public String Username() {
+        return this.username;
     }
 
-    public String getPlayerTwo() {
-        return this.PlayerTwo;
+    public String Score() {
+        return this.score;
     }
 
-    public String getWinner() {
-        return this.Winner;
+    public String Name() {
+        return this.name;
     }
+
 }

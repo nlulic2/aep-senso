@@ -5,31 +5,4 @@
     android:layout_height="match_parent"
     tools:context=".AppStart">
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:text="@string/app_login"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="250dp"
-        />
-
-    <Button
-        android:id="@+id/btnRegister"
-        android:text="@string/app_register"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="310dp"
-        />
-
-    <Button
-        android:id="@+id/btnPlayOffline"
-        android:text="@string/app_play_offline"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="370dp"/>
-
-
 </RelativeLayout>

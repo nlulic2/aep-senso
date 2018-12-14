@@ -30,6 +30,14 @@ public class Login extends AppCompatActivity {
         this.render();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(intent.getStringExtra("nextActivity") == null)
+            Session.Reset();
+    }
+
     private void render() {
 
         EditText username = findViewById(R.id.etLoginUsername),
@@ -104,8 +112,6 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        //TODO: make it impossible to have more than two values in array, when the session is empty always redirect from
-        //routes to Login (Except from Register and Main)
         Intent intent = getIntent();
         String nextActivity = intent.getStringExtra("nextActivity");
         if(nextActivity != null && nextActivity.equals(MultiplayerGame.class + "")) {

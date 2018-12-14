@@ -10,7 +10,7 @@ public class Session {
 
     public static void Store(User user) {
 
-        if(sessions.size() == 2) {
+        if(sessions.size() > 1) {
             sessions.remove(1);
             sessions.add(user);
         } else {
@@ -20,6 +20,12 @@ public class Session {
 
     public static void Reset() {
         sessions = new ArrayList<>();
+    }
+
+    public static void RemoveAt(int index) {
+
+        if(sessions.size() > 1)
+            sessions.remove(index);
     }
 
     public static User getMain() {

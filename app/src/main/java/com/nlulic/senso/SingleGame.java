@@ -8,15 +8,20 @@ import android.widget.Button;
 import android.widget.Toast;
 import java.util.Arrays;
 import java.util.List;
+
+import business.Dialog;
 import business.SensoGame;
 import business.SensoSound;
 import business.SensoValue;
+import business.Session;
+import data.HighscoreService;
 
 public class SingleGame extends AppCompatActivity {
 
     private SensoGame game = new SensoGame();
     private Handler handler = new Handler();
     private SensoSound tone = new SensoSound();
+    private HighscoreService highscoreService;
 
     private boolean isClicking = false;
     private boolean isIterating = false;
@@ -28,6 +33,8 @@ public class SingleGame extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_game);
         Button startGame = (Button)findViewById(R.id.startSingleGame);
+
+        this.highscoreService = new HighscoreService(this);
 
         this.setButtonListeners();
         startGame.setOnClickListener(new View.OnClickListener() {
@@ -51,15 +58,12 @@ public class SingleGame extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if(!game.hasGameStarted() || game.isGameOver() || isClicking || isIterating)
-                        return;
+                if(!game.hasGameStarted() || game.isGameOver() || isClicking || isIterating)
+                    return;
 
-                    Toast.makeText(getApplicationContext(), "wtf", Toast.LENGTH_LONG).show();
-
-
-                    game.AddUserPattern(SensoValueByButton(button));
-                    assertUserAndGamePattern();
-                    handleClick(button);
+                game.AddUserPattern(SensoValueByButton(button));
+                assertUserAndGamePattern();
+                handleClick(button);
                 }
             });
         }
@@ -108,7 +112,12 @@ public class SingleGame extends AppCompatActivity {
         game.ComparePatterns();
 
         if(game.isGameOver()) {
-            Toast.makeText(getApplicationContext(), "Game Over, played " + game.getRounds() + " rounds.", Toast.LENGTH_LONG).show();
+
+            boolean success = this.highscoreService.Save(Session.getMain(), game.getRounds());
+            if(!success)
+                Toast.makeText(getApplicationContext(), "Failed to save game result", Toast.LENGTH_LONG).show();
+
+            Dialog.Show(String.format("Verloren! Sie haben %s Runden gespielt", game.getRounds()), this);
         }
 
         if(game.getUserPattern().size() == game.getGamePattern().size()) {

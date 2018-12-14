@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import Dto.User;
+import business.Dialog;
 import business.SensoGame;
 import business.SensoSound;
 import business.SensoValue;
@@ -51,10 +52,10 @@ public class MultiplayerGame extends AppCompatActivity {
         });
 
         final List<Button> buttons = Arrays.asList(
-                (Button)findViewById(R.id.btnYellow),
-                (Button)findViewById(R.id.btnGreen),
-                (Button)findViewById(R.id.btnBlue),
-                (Button)findViewById(R.id.btnRed)
+            (Button)findViewById(R.id.btnYellow),
+            (Button)findViewById(R.id.btnGreen),
+            (Button)findViewById(R.id.btnBlue),
+            (Button)findViewById(R.id.btnRed)
         );
 
         for(final Button button :  buttons) {
@@ -62,12 +63,12 @@ public class MultiplayerGame extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
-                    if(!game.hasGameStarted() || game.isGameOver()  || isClicking || isIterating)
-                        return;
+                if(!game.hasGameStarted() || game.isGameOver()  || isClicking || isIterating)
+                    return;
 
-                    game.AddUserPattern(SensoValueByButton(button));
-                    assertUserAndGamePattern();
-                    handleClick(button);
+                game.AddUserPattern(SensoValueByButton(button));
+                assertUserAndGamePattern();
+                handleClick(button);
 
                 }
             });
@@ -99,16 +100,16 @@ public class MultiplayerGame extends AppCompatActivity {
         @Override
         public void run() {
 
-            isIterating = true;
-            SensoValue value = game.NextGamePattern();
+        isIterating = true;
+        SensoValue value = game.NextGamePattern();
 
-            if(value == null) {
-                stopRepeating();
-                return;
-            }
+        if(value == null) {
+            stopRepeating();
+            return;
+        }
 
-            handleClick(ButtonBySensoValue(value));
-            handler.postDelayed(this, ITERATION_DELAY);
+        handleClick(ButtonBySensoValue(value));
+        handler.postDelayed(this, ITERATION_DELAY);
         }
     };
 
@@ -179,15 +180,8 @@ public class MultiplayerGame extends AppCompatActivity {
 
         if(game.isGameOver()) {
 
-            /*
-            boolean success = SaveGameResultService.Process(playerOne, playerTwo, getCurrentPlayer() == playerOne ? playerTwo : playerOne, this);
-
-            if(success) {
-                Toast.makeText(getApplicationContext(), "saved", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
-            }
-            */
+            User winner = getCurrentPlayer().Guid() == playerOne.Guid() ? playerTwo : playerOne;
+            Dialog.Show(String.format("%s hat gewonnen!", winner.Username()), this);
         }
 
         assertionHandler.postDelayed(runAssertion, 1000);
