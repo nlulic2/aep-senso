@@ -32,6 +32,10 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
         column_password = "password",
         column_guid = "guid";
 
+    private String highscore_table = "highscore",
+        column_player_id = "player_id",
+        column_score = "score";
+
     public MySqliteOpenHelper(Context ctxt) {
         super(ctxt, database_name, null, database_version);
     }
@@ -49,6 +53,13 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
             "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR(255), %s VARCHAR(255) UNIQUE, %s VARCHAR(255), %s VARCHAR(255))",
             user_table, column_id, column_display_name, column_username, column_password, column_guid
         ));
+
+        /*
+        db.execSQL(String.format(
+            "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %d INTEGER, %d INTEGER, FOREIGN KEY(%s) REFERENCES %s(%s))",
+            highscore_table, column_id, column_score, column_player_id, column_player_id, user_table, column_id
+        ));
+        */
 
         System.out.print("CREATED TABLEEEEEEEEEEEEEEEEEEES");
     }

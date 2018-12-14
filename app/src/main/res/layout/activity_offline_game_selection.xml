@@ -5,6 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".OfflineGameSelection">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_width="wrap_content"
+            android:textSize="18dp"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Abmelden"
+            android:layout_alignParentRight="true"
+            />
+
+    </RelativeLayout>
+
     <Button
         android:id="@+id/btnHighscore"
         android:text="@string/highscore"

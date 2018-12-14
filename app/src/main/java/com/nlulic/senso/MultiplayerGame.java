@@ -10,14 +10,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Arrays;
 import java.util.List;
+
+import Dto.User;
 import business.SensoGame;
 import business.SensoSound;
 import business.SensoValue;
+import business.Session;
 import data.SaveGameResultService;
 
 public class MultiplayerGame extends AppCompatActivity {
 
-    private String playerOne, playerTwo;
+    private User playerOne, playerTwo;
     private SensoSound tone = new SensoSound();
     private SensoGame game = new SensoGame();
     private Handler handler = new Handler();
@@ -71,7 +74,7 @@ public class MultiplayerGame extends AppCompatActivity {
         }
 
         TextView playerDisplay = findViewById(R.id.playerDisplay);
-        playerDisplay.setText(this.playerOne + " vs. " +  this.playerTwo);
+        playerDisplay.setText(this.playerOne.Username() + " vs. " +  this.playerTwo.Username());
 
     }
 
@@ -163,19 +166,20 @@ public class MultiplayerGame extends AppCompatActivity {
             @Override
             public void run() {
 
-                if(!game.isGameOver() &&  game.getUserPattern().size() == game.getGamePattern().size()) {
+            if(!game.isGameOver() &&  game.getUserPattern().size() == game.getGamePattern().size()) {
 
-                    game.NextRound();
-                    renderRounds();
-                    showCurrentPlayer();
-                    iterateGamePattern();
-                }
+                game.NextRound();
+                renderRounds();
+                showCurrentPlayer();
+                iterateGamePattern();
+            }
 
             }
         };
 
         if(game.isGameOver()) {
 
+            /*
             boolean success = SaveGameResultService.Process(playerOne, playerTwo, getCurrentPlayer() == playerOne ? playerTwo : playerOne, this);
 
             if(success) {
@@ -183,6 +187,7 @@ public class MultiplayerGame extends AppCompatActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "failed", Toast.LENGTH_LONG).show();
             }
+            */
         }
 
         assertionHandler.postDelayed(runAssertion, 1000);
@@ -193,16 +198,16 @@ public class MultiplayerGame extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        this.playerOne = intent.getStringExtra("PlayerOne");
-        this.playerTwo = intent.getStringExtra("PlayerTwo");
+        this.playerOne = Session.getMain();
+        this.playerTwo = Session.getSecondPlayer();
     }
 
     private void showCurrentPlayer() {
 
-        String currentPlayer = this.getCurrentPlayer();
+        User currentPlayer = this.getCurrentPlayer();
         TextView playerTextbox = findViewById(R.id.currentPlayer);
 
-        playerTextbox.setText(currentPlayer);
+        playerTextbox.setText(currentPlayer.Username());
     }
 
     private void handleClick(final Button button) {
@@ -250,7 +255,7 @@ public class MultiplayerGame extends AppCompatActivity {
 
     }
 
-    private String getCurrentPlayer() {
+    private User getCurrentPlayer() {
         return this.game.getRounds() % 2 == 0 ? this.playerOne : this.playerTwo;
     }
 }

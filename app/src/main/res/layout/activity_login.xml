@@ -5,7 +5,31 @@
     android:layout_height="match_parent"
     tools:context=".Login">
 
+    <RelativeLayout
+        android:id="@+id/rlPlayerTwoTitle"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:textSize="21dp"
+            android:layout_centerInParent="true"
+            android:text="Bitte melden Sie Spieler 2 an!"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlLoginForm"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <EditText
+
         android:id="@+id/etLoginUsername"
         android:layout_width="378dp"
         android:layout_height="wrap_content"
@@ -64,5 +88,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

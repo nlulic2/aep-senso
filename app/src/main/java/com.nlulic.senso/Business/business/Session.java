@@ -9,7 +9,17 @@ public class Session {
     private static List<User> sessions = new ArrayList<User>();
 
     public static void Store(User user) {
-        sessions.add(user);
+
+        if(sessions.size() == 2) {
+            sessions.remove(1);
+            sessions.add(user);
+        } else {
+            sessions.add(user);
+        }
+    }
+
+    public static void Reset() {
+        sessions = new ArrayList<>();
     }
 
     public static User getMain() {

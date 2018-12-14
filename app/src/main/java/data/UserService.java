@@ -7,11 +7,9 @@ import business.Session;
 
 public class UserService {
 
-    private Context context;
     private  MySqliteOpenHelper db;
 
     public UserService(Context ctxt) {
-        this.context = ctxt;
         this.db = new MySqliteOpenHelper(ctxt);
     }
 
