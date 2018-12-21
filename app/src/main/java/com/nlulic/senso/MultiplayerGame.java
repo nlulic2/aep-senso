@@ -16,7 +16,6 @@ import business.SensoGame;
 import business.SensoSound;
 import business.SensoValue;
 import business.Session;
-import data.SaveGameResultService;
 
 public class MultiplayerGame extends AppCompatActivity {
 

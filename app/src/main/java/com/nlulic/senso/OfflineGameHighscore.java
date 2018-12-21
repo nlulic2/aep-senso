@@ -1,5 +1,6 @@
 package com.nlulic.senso;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -36,7 +37,7 @@ public class OfflineGameHighscore extends AppCompatActivity {
         ArrayList<String> results = new ArrayList<>();
 
         for(GameResult result : gameResults) {
-            results.add(String.format("%s Runden (%s)", result.Score(), result.Username()));
+            results.add(String.format("%s %s gespielt (%s)", result.Score(), Integer.parseInt(result.Score()) == 1 ? "Runde" : "Runden", result.Username()));
         }
 
         ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, results);
