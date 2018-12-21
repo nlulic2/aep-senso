@@ -44,6 +44,7 @@ public class MySqliteOpenHelper extends SQLiteOpenHelper {
     @SuppressLint("DefaultLocale")
     public void onCreate(SQLiteDatabase db) {
 
+        //TODO: Check if can get removed
         db.execSQL(String.format(
             "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR(255), %s VARCHAR(255), %s VARCHAR(255))",
             table_name, column_id, column_player_one, column_player_two, column_winner

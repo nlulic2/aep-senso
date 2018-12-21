@@ -1,6 +1,7 @@
 package com.nlulic.senso;
 
 import Dto.User;
+import business.Dialog;
 import data.MySqliteOpenHelper;
 import data.UserService;
 
@@ -59,14 +60,14 @@ public class Register extends AppCompatActivity {
             else if(password.trim().length() < 1)
                 missingField = "Passwort";
 
-            Toast.makeText(getApplicationContext(), "Bitte geben Sie ein "  + missingField + " an.", Toast.LENGTH_LONG).show();
+            Dialog.Show(String.format("Bitte geben Sie ein %s an.", missingField), this);
             return;
         }
 
         UserService userService = new UserService(this);
 
         if(userService.Exists(username)) {
-            Toast.makeText(getApplicationContext(), "Benutzer "  + username + " existiert bereits.", Toast.LENGTH_LONG).show();
+            Dialog.Show(String.format("Benutzer %s existiert bereits!", username), this);
             return;
         }
 
@@ -76,15 +77,25 @@ public class Register extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), String.format("Der Benutzer %s wurde erstellt!", user.Username()), Toast.LENGTH_LONG).show();
             openLoginActivity(user.Username(), password);
         } else {
-            Toast.makeText(getApplicationContext(), "Fehler beim erstellen des Benutzers!", Toast.LENGTH_LONG).show();
+            Dialog.Show("Fehler beim erstellen des Benutzers!",this);
         }
     }
 
     private void openLoginActivity(String username, String password) {
 
+        Intent currentIntent = getIntent();
+
+        String nextActivity = currentIntent.getStringExtra("nextActivity");
+
         Intent intent = new Intent(this, Login.class);
+
+        if(nextActivity != null) {
+            intent.putExtra("nextActivity", MultiplayerGame.class + "");
+        }
+
         intent.putExtra("username", username);
         intent.putExtra("password", password);
+
         startActivity(intent);
     }
 }

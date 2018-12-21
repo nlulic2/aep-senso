@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Dto.GameResult;
 import data.HighscoreService;
-import data.MySqliteOpenHelper;
 
 public class OfflineGameHighscore extends AppCompatActivity {
 
@@ -24,9 +22,6 @@ public class OfflineGameHighscore extends AppCompatActivity {
         setContentView(R.layout.activity_offline_game_highscore);
 
         this.highscoreService = new HighscoreService(this);
-
-        //highscoreService.GetAll();
-        //populateListView();
     }
 
     @Override
@@ -41,7 +36,7 @@ public class OfflineGameHighscore extends AppCompatActivity {
         ArrayList<String> results = new ArrayList<>();
 
         for(GameResult result : gameResults) {
-            results.add(String.format("%s (%s)", result.Score(), result.Username()));
+            results.add(String.format("%s Runden (%s)", result.Score(), result.Username()));
         }
 
         ListAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, results);

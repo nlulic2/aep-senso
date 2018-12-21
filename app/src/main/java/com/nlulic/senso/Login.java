@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import Dto.User;
+import business.Dialog;
 import business.Session;
 import data.UserService;
 
@@ -82,7 +83,12 @@ public class Login extends AppCompatActivity {
     }
 
     private void openRegisterActivity() {
-        Intent intent = new Intent(this, Register.class);
+        Intent intent = new Intent(this, Register.class),
+                currentInten = getIntent();
+
+        if(currentInten.getStringExtra("nextActivity") != null)
+            intent.putExtra("nextActivity", Login.class + "");
+
         startActivity(intent);
     }
 
@@ -100,7 +106,8 @@ public class Login extends AppCompatActivity {
                 ? "Bitte geben Sie einen Benutzernamen an."
                 : "Bitte geben Sie ein Passwort an.";
 
-            Toast.makeText(getApplicationContext(), alertMessage, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), alertMessage, Toast.LENGTH_LONG).show();
+            Dialog.Show(alertMessage, this);
             return;
         }
 
@@ -108,7 +115,7 @@ public class Login extends AppCompatActivity {
         User user = userService.Login(username, password);
 
         if(user.IsEmpty()) {
-            Toast.makeText(getApplicationContext(), "Falsche Benutzername oder Passwort, bitte versuchen Sie es erneut", Toast.LENGTH_LONG).show();
+            Dialog.Show("Falsche Benutzername oder Passwort, bitte versuchen Sie es erneut", this);
             return;
         }
 
